@@ -1,6 +1,6 @@
 import { cart, removeFromCart } from "../data/cart.js";
-import { products } from "../data/products.js";
-import { deliveryOptions } from "../data/deliveryOptions.js";
+import { products, getProduct } from "../data/products.js";
+import { deliveryOptions, getDeliveryOption } from "../data/deliveryOptions.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.13/esm/index.js";
 
 function renderOrderSummary() {
@@ -8,23 +8,12 @@ function renderOrderSummary() {
     cart.forEach((cartItem) => {
         const productId = cartItem.productId;
 
-        let matchingProduct;
-
-        products.forEach((product) => {
-            if (product.id === productId) {
-                matchingProduct = product;
-            }
-        });
+        const matchingProduct = getProduct(productId);
 
         const deliveryOptionId = cartItem.deliveryOptionId;
 
-        let deliveryOption;
+        const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-        deliveryOptions.forEach((option) => {
-            if (option.id === deliveryOptionId) {
-                deliveryOption = option;
-            }
-        });
         const today = dayjs();
         const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
         const dateString = deliveryDate.format("dddd, MMMM D");
@@ -91,6 +80,7 @@ function renderOrderSummary() {
                 `.js-cart-item-container-${productId}`
             );
             itemContainer.remove();
+            renderPaymentSummary();
         });
     });
 
@@ -131,6 +121,7 @@ function renderOrderSummary() {
             const { productId, deliveryOptionId } = element.dataset;
             updateDeliveryOption(productId, deliveryOptionId);
             renderOrderSummary();
+            renderPaymentSummary();
         });
     });
 }
@@ -148,22 +139,22 @@ function updateDeliveryOption(productId, deliveryOptionId) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-let totalPriceCents = 0;
-let totalQuantity = 0;
-cart.forEach((cartItem) => {
-    const productId = cartItem.productId;
-
-    let matchingProduct;
-    products.forEach((product) => {
-        if (product.id === productId) {
-            matchingProduct = product;
-        }
+function renderPaymentSummary() {
+    let totalPriceCents = 0;
+    let totalQuantity = 0;
+    let totalShipPriceCents = 0;
+    cart.forEach((cartItem) => {
+        const product = getProduct(cartItem.productId);
+        totalQuantity += cartItem.quantity;
+        totalPriceCents += product.priceCents * cartItem.quantity;
+        const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+        totalShipPriceCents += deliveryOption.priceCents;
     });
-    totalPriceCents += matchingProduct.priceCents * cartItem.quantity;
-    totalQuantity += cartItem.quantity;
-});
+    const totalBeforeTax = totalPriceCents + totalShipPriceCents;
+    const totalAfterTax = totalBeforeTax * 0.1;
+    const totalCents = totalBeforeTax + totalAfterTax;
 
-const paymentSummaryHTML = `
+    const paymentSummaryHTML = `
    <div class="payment-summary-title">
           Order Summary
         </div>
@@ -177,22 +168,30 @@ const paymentSummaryHTML = `
 
         <div class="payment-summary-row">
           <div>Shipping &amp; handling:</div>
-          <div class="payment-summary-money">$4.99</div>
+          <div class="payment-summary-money">$${(
+              totalShipPriceCents / 100
+          ).toFixed(2)}</div>
         </div>
 
         <div class="payment-summary-row subtotal-row">
           <div>Total before tax:</div>
-          <div class="payment-summary-money">$47.74</div>
+          <div class="payment-summary-money">$${(totalBeforeTax / 100).toFixed(
+              2
+          )}</div>
         </div>
 
         <div class="payment-summary-row">
           <div>Estimated tax (10%):</div>
-          <div class="payment-summary-money">$4.77</div>
+          <div class="payment-summary-money">$${(totalAfterTax / 100).toFixed(
+              2
+          )}</div>
         </div>
 
         <div class="payment-summary-row total-row">
           <div>Order total:</div>
-          <div class="payment-summary-money">$52.51</div>
+          <div class="payment-summary-money">$${(totalCents / 100).toFixed(
+              2
+          )}</div>
         </div>
 
         <button class="place-order-button button-primary">
@@ -200,4 +199,8 @@ const paymentSummaryHTML = `
         </button>
   `;
 
-document.querySelector(".js-payment-summary").innerHTML = paymentSummaryHTML;
+    document.querySelector(".js-payment-summary").innerHTML =
+        paymentSummaryHTML;
+}
+
+renderPaymentSummary();
