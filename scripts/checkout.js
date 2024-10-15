@@ -102,7 +102,9 @@ function renderDeliveryOptions(matchingProduct, cartItem) {
                 : `$${(deliveryOption.priceCents / 100).toFixed(2)} -`;
         const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
         html += `
-  <div class="delivery-option">
+  <div class="delivery-option js-delivery-option" data-product-id="${
+      matchingProduct.id
+  }" data-delivery-option-id="${deliveryOption.id}">
                   <input type="radio" ${isChecked ? "checked" : ""}
                     class="delivery-option-input"
                     name="delivery-option-${matchingProduct.id}">
@@ -118,6 +120,24 @@ function renderDeliveryOptions(matchingProduct, cartItem) {
     `;
     });
     return html;
+}
+
+document.querySelectorAll(".js-delivery-option").forEach((element) => {
+    element.addEventListener("click", () => {
+        const { productId, deliveryOptionId } = element.dataset;
+        updateDeliveryOption(productId, deliveryOptionId);
+    });
+});
+
+function updateDeliveryOption(productId, deliveryOptionId) {
+    let matchingItem;
+
+    cart.forEach((cartItem) => {
+        if (productId === cartItem.productId) matchingItem = cartItem;
+    });
+
+    matchingItem.deliveryOptionId = deliveryOptionId;
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 let totalPriceCents = 0;
