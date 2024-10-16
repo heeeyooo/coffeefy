@@ -1,6 +1,16 @@
 import { products } from "../data/products.js";
 import { cart } from "../data/cart.js";
 
+document.querySelector(".wrapper").style.display = "none";
+
+setTimeout(() => {
+    document.querySelector(".wrapper").style.display = "initial";
+}, 2000);
+
+setTimeout(() => {
+    document.querySelector(".loading").style.display = "none";
+}, 3000);
+
 let productsHtml = "";
 
 products.forEach((product) => {

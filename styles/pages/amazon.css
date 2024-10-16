@@ -1,3 +1,72 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    z-index: 9999;
+    opacity: 1;
+    animation: hideLoading 1s 2s forwards;
+}
+
+@keyframes hideLoading {
+    to {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+.cup {
+    position: relative;
+    width: 50px;
+    height: 70px;
+    border: 5px solid black;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.cup::after {
+    position: absolute;
+    content: "";
+    width: 30px;
+    height: 30px;
+    border: 5px solid black;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -20px;
+    box-sizing: border-box;
+    z-index: -1;
+}
+
+.cup::before {
+    position: absolute;
+    content: "";
+    width: 37px;
+    height: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(199, 139, 87);
+    bottom: 2px;
+    box-sizing: border-box;
+    animation: fillCup 2s forwards;
+    animation-timing-function: cubic-bezier(0.75, 0.5, 0.25, 1);
+}
+
+@keyframes fillCup {
+    100% {
+        height: 90%;
+    }
+}
+
 .main {
     margin-top: 60px;
 }
