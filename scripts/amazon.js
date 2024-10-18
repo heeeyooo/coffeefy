@@ -1,15 +1,16 @@
 import { products } from "../data/products.js";
 import { cart } from "../data/cart.js";
+import { wishList, removeFromWish } from "../data/wishList.js";
 
-document.querySelector(".wrapper").style.display = "none";
+// document.querySelector(".wrapper").style.display = "none";
 
-setTimeout(() => {
-    document.querySelector(".wrapper").style.display = "initial";
-}, 2000);
+// setTimeout(() => {
+//     document.querySelector(".wrapper").style.display = "initial";
+// }, 2000);
 
-setTimeout(() => {
-    document.querySelector(".loading").style.display = "none";
-}, 3000);
+// setTimeout(() => {
+//     document.querySelector(".loading").style.display = "none";
+// }, 3000);
 
 let productsHtml = "";
 
@@ -17,6 +18,9 @@ products.forEach((product) => {
     productsHtml += `
          <div class="product-container">
         <div class="product-image-container">
+        <span class="product-wish js-product-wish" data-product-id=${
+            product.id
+        }><i class="fa-solid fa-heart"></i></span>
           <img class="product-image" src=${product.image}>
         </div>
 
@@ -52,8 +56,74 @@ products.forEach((product) => {
       </div>
         `;
 });
-
 document.querySelector(".js-products-grid").innerHTML = productsHtml;
+
+document.querySelectorAll(".js-product-wish").forEach((wishBtn) => {
+    wishBtn.addEventListener("click", () => {
+        if (wishBtn.style.color === "red") {
+            wishBtn.style.color = "black";
+        }
+        const productId = wishBtn.dataset.productId;
+
+        let matchingWish;
+
+        wishList.forEach((wish) => {
+            if (wish.id === productId) {
+                matchingWish = wish;
+            }
+        });
+
+        if (matchingWish) {
+            removeFromWish(productId);
+        } else {
+            let matchingItem;
+
+            products.forEach((product) => {
+                if (product.id === productId) {
+                    matchingItem = product;
+                }
+            });
+            wishList.push({
+                id: productId,
+                image: matchingItem.image,
+                name: matchingItem.name,
+                priceCents: matchingItem.priceCents,
+                isWish: true,
+            });
+            localStorage.setItem("wishList", JSON.stringify(wishList));
+
+            let matchingWish;
+
+            wishList.forEach((wish) => {
+                if (wish.id === productId) {
+                    matchingWish = wish;
+                    console.log(matchingWish.isWish);
+                    if (matchingWish.isWish === true) {
+                        wishBtn.style.color = "red";
+                    } else {
+                        wishBtn.style.color = "black";
+                    }
+                }
+            });
+        }
+    });
+
+    const productId = wishBtn.dataset.productId;
+    let matchingWish;
+
+    wishList.forEach((wish) => {
+        if (wish.id === productId) {
+            matchingWish = wish;
+            console.log(matchingWish.isWish);
+            if (matchingWish.isWish === true) {
+                wishBtn.style.color = "red";
+            } else {
+                wishBtn.style.color = "black";
+            }
+        }
+    });
+});
+
 document.querySelectorAll(".js-add-to-cart-btn").forEach((btn) => {
     btn.addEventListener("click", (event) => {
         // Add visible class to show cart icon

@@ -1,4 +1,11 @@
-import { cart, removeFromCart } from "../data/cart.js";
+import {
+    cart,
+    removeFromCart,
+    increaseQty,
+    decreaseQty,
+    inactiveBtn,
+    emptyCart,
+} from "../data/cart.js";
 import { products, getProduct } from "../data/products.js";
 import { deliveryOptions, getDeliveryOption } from "../data/deliveryOptions.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.13/esm/index.js";
@@ -38,10 +45,15 @@ function renderOrderSummary() {
                   $${(matchingProduct.priceCents / 100).toFixed(2)}
                 </div>
                 <div class="product-quantity">
+                    <button class="decrease-qty-btn" data-product-id="${
+                        matchingProduct.id
+                    }">-</button>
+                    <button class="increase-qty-btn" data-product-id="${
+                        matchingProduct.id
+                    }">+</button>
                   <span>
-                    Quantity: <span class="quantity-label">${
-                        cartItem.quantity
-                    }</span>
+                    Quantity: <span class="quantity-label">
+                    ${cartItem.quantity}</span>
                   </span>
                   <span class="update-quantity-link link-primary">
                     Update
@@ -69,6 +81,36 @@ function renderOrderSummary() {
     });
 
     document.querySelector(".js-order-summary").innerHTML = orderSummaryHtml;
+
+    const increaseQtyBtn = document.querySelectorAll(".increase-qty-btn");
+
+    increaseQtyBtn.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const productId = btn.dataset.productId;
+            // console.log(productId);
+            increaseQty(productId);
+
+            renderOrderSummary();
+
+            renderPaymentSummary();
+        });
+    });
+
+    const decreaseQtyBtn = document.querySelectorAll(".decrease-qty-btn");
+
+    decreaseQtyBtn.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const productId = btn.dataset.productId;
+            decreaseQty(productId);
+            renderOrderSummary();
+            renderPaymentSummary();
+        });
+    });
+
+    document.querySelectorAll(".decrease-qty-btn").forEach((btn) => {
+        const productId = btn.dataset.productId;
+        inactiveBtn(productId, btn);
+    });
 
     const deleteBtn = document.querySelectorAll(".js-delete-quantity-link");
 
@@ -153,6 +195,8 @@ function renderPaymentSummary() {
     const totalBeforeTax = totalPriceCents + totalShipPriceCents;
     const totalAfterTax = totalBeforeTax * 0.1;
     const totalCents = totalBeforeTax + totalAfterTax;
+    document.querySelector(".return-to-home-link").innerHTML =
+        totalQuantity + " items";
 
     const paymentSummaryHTML = `
    <div class="payment-summary-title">
@@ -204,3 +248,10 @@ function renderPaymentSummary() {
 }
 
 renderPaymentSummary();
+
+document.querySelector(".delete-all-btn").addEventListener("click", () => {
+    // localStorage.removeItem("cart");
+    emptyCart();
+    renderPaymentSummary();
+    renderOrderSummary();
+});

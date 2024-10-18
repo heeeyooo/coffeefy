@@ -8,7 +8,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     background-color: white;
@@ -148,12 +148,21 @@
 }
 
 .product-image-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 
     height: 180px;
     margin-bottom: 20px;
+}
+
+.product-wish {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: black;
+    cursor: pointer;
 }
 
 .product-image {
@@ -221,7 +230,7 @@
 .add-to-cart-button {
     width: 100%;
     padding: 8px;
-    border-radius: 50px;
+    /* border-radius: 50px; */
 }
 
 .js-added-to-cart-visible {

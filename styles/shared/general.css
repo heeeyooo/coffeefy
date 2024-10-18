@@ -32,23 +32,30 @@ button {
 }
 
 .button-primary {
-    color: rgb(33, 33, 33);
-    background-color: rgb(255, 216, 20);
-    border: 1px solid rgb(252, 210, 0);
-    border-radius: 8px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(0, 0, 0);
+    /* border-radius: 8px; */
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+    transition: box-shadow 0.2s;
+    box-shadow: inset 0px 0px 0px black;
 }
 
 .button-primary:hover {
-    background-color: rgb(247, 202, 0);
-    border: 1px solid rgb(242, 194, 0);
+    /* color: rgb(255, 255, 255); */
+    /* background-color: rgb(0, 0, 0); */
+    /* border: 5px solid rgb(0, 0, 0); */
+
+    /* box-sizing: border-box; */
+    box-shadow: inset 2px 2px 0px black, inset -2px -2px 0px black;
 }
 
 .button-primary:active {
-    background: rgb(255, 216, 20);
-    border-color: rgb(252, 210, 0);
-    box-shadow: none;
+    background: rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0);
+    color: white;
+    /* box-shadow: none; */
 }
 
 .button-secondary {
