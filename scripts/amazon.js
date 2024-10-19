@@ -1,6 +1,9 @@
 import { products } from "../data/products.js";
 import { cart } from "../data/cart.js";
 import { wishList, removeFromWish } from "../data/wishList.js";
+import { updateQuantity } from "../data/cart.js";
+
+addEventListener("touchstart", function () {}, true);
 
 // document.querySelector(".wrapper").style.display = "none";
 
@@ -76,18 +79,8 @@ document.querySelectorAll(".js-product-wish").forEach((wishBtn) => {
         if (matchingWish) {
             removeFromWish(productId);
         } else {
-            let matchingItem;
-
-            products.forEach((product) => {
-                if (product.id === productId) {
-                    matchingItem = product;
-                }
-            });
             wishList.push({
                 id: productId,
-                image: matchingItem.image,
-                name: matchingItem.name,
-                priceCents: matchingItem.priceCents,
                 isWish: true,
             });
             localStorage.setItem("wishList", JSON.stringify(wishList));
@@ -160,13 +153,10 @@ document.querySelectorAll(".js-add-to-cart-btn").forEach((btn) => {
     });
 });
 
-export function updateQuantity() {
-    let cartQuantity = 0;
-
-    cart.forEach((item) => {
-        cartQuantity += item.quantity;
-    });
-    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-}
-
 updateQuantity();
+
+document.querySelector(".burger-btn").addEventListener("click", () => {
+    document
+        .querySelector(".burger-btn")
+        .classList.toggle("burger-btn--active");
+});

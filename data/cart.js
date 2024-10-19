@@ -73,3 +73,17 @@ export function inactiveBtn(productId, btn) {
         }
     });
 }
+
+export function updateQuantity() {
+    let cartQuantity = 0;
+
+    cart.forEach((item) => {
+        cartQuantity += item.quantity;
+    });
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+    if (cartQuantity === 0) {
+        document.querySelector(".js-cart-quantity").style.display = "none";
+    } else {
+        document.querySelector(".js-cart-quantity").style.display = "flex";
+    }
+}
