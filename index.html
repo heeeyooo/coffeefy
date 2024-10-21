@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="./styles/shared/amazon-header.css">
   <link rel="stylesheet" href="styles/shared/general.css">
   <link rel="stylesheet" href="styles/pages/amazon.css">
+  <link rel="stylesheet" href="styles/pages/wish.css">
   <script src="https://kit.fontawesome.com/4b11705643.js" crossorigin="anonymous"></script>
 </head>
 
@@ -33,10 +34,8 @@
       </div>
       <a class="header__logo" href="index.html">Coffeefy</a>
       <div class="header__right-section">
-        <form class="header__search-form" action="">
-          <input class="search-bar" type="text" placeholder="Search">
-          <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </form>
+        <button class="search-btn none"><i class="fa-solid fa-magnifying-glass"></i></button>
+
 
         <a class="header__wish-link" href="wish.html"><i class="fa-regular fa-heart"></i></a>
         <a class="cart-link header-link" href="checkout.html">
@@ -45,6 +44,19 @@
         </a>
       </div>
     </header>
+    <!-- <div class="search-list"></div> -->
+    <div class="search-section">
+      <div class="search-header">
+        <form class="header__search-form" action="">
+          <input id="search-input" class="search-bar" type="text" placeholder="Search">
+          <!-- <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button> -->
+        </form>
+        <button class="close-search-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="search-list"></div>
+    </div>
+
+    <div class="dark-wrapper"></div>
     <!-- <div class="amazon-header">
       <div class="amazon-header-left-section">
         <a href="index.html" class="header-link">

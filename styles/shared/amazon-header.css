@@ -62,9 +62,7 @@
 }
 
 .header__search-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 500px;
     background-color: rgba(0, 0, 0, 0.05);
     height: 40px;
 }
@@ -73,12 +71,14 @@
     background-color: transparent;
     font-size: 16px;
     height: 100%;
+    width: 100%;
     box-sizing: border-box;
     border: none;
     padding: 0 15px;
 }
 
-.search-btn {
+.search-btn,
+.search-btn-mobile {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,6 +88,72 @@
     width: 40px;
     font-size: 20px;
     padding: 0;
+}
+
+.search-section {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    left: 0;
+    height: 0;
+    background-color: rgb(255, 255, 255);
+    z-index: 500;
+    transition: height 0.5s;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-section--active {
+    height: 50%;
+}
+
+.search-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 15px;
+    padding: 15px;
+}
+
+.close-search-btn {
+    font-size: 20px;
+    background-color: white;
+    border: none;
+}
+
+.search-list {
+    margin-top: 100px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.dark-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    z-index: 99;
+    pointer-events: none;
+    transition: all 0.5s;
+}
+
+.dark-wrapper--active {
+    pointer-events: all;
+    opacity: 1;
 }
 
 .orders-link {
@@ -155,7 +221,7 @@
     .header__right-section {
         column-gap: 15px;
     }
-    .header__search-form {
+    .none {
         display: none;
     }
 
@@ -196,5 +262,22 @@
         transform: translateY(0px);
         rotate: -45deg;
         transition: transform 0.3s, rotate 0.3s 0.3s;
+    }
+    .search-section {
+        position: fixed;
+        /* top: 70px; */
+        top: 0;
+        bottom: 0;
+        /* right: 0; */
+        right: auto;
+        left: auto;
+        /* height: 0; */
+        height: auto;
+        transition: width 0.5s;
+        width: 0;
+    }
+
+    .search-section--active {
+        width: 100%;
     }
 }

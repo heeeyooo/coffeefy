@@ -107,7 +107,7 @@ document.querySelectorAll(".js-product-wish").forEach((wishBtn) => {
     wishList.forEach((wish) => {
         if (wish.id === productId) {
             matchingWish = wish;
-            console.log(matchingWish.isWish);
+            // console.log(matchingWish.isWish);
             if (matchingWish.isWish === true) {
                 wishBtn.style.color = "red";
             } else {
@@ -159,4 +159,67 @@ document.querySelector(".burger-btn").addEventListener("click", () => {
     document
         .querySelector(".burger-btn")
         .classList.toggle("burger-btn--active");
+});
+
+document.querySelectorAll(".search-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+        document
+            .querySelector(".search-section")
+            .classList.add("search-section--active");
+        document
+            .querySelector(".dark-wrapper")
+            .classList.add("dark-wrapper--active");
+    });
+});
+
+document.querySelector(".close-search-btn").addEventListener("click", () => {
+    document
+        .querySelector(".search-section")
+        .classList.remove("search-section--active");
+    document
+        .querySelector(".dark-wrapper")
+        .classList.remove("dark-wrapper--active");
+});
+
+document.querySelector(".dark-wrapper").addEventListener("click", () => {
+    document
+        .querySelector(".dark-wrapper")
+        .classList.remove("dark-wrapper--active");
+    document
+        .querySelector(".search-section")
+        .classList.remove("search-section--active");
+});
+
+const searchInput = document.getElementById("search-input");
+searchInput.addEventListener("focus", () => {});
+
+searchInput.addEventListener("focusout", () => {});
+
+searchInput.addEventListener("input", (e) => {
+    const search = e.target.value;
+    console.log(search);
+    let searchHTML = "";
+
+    products
+        .filter((product) => {
+            return search.toLowerCase().trim() === ""
+                ? (searchHTML = "")
+                : product.name
+                      .toLowerCase()
+                      .startsWith(search.toLowerCase().trim());
+        })
+        .forEach((product) => {
+            searchHTML += `
+         <div class="wish-product-container">
+        <img src="${product.image}" alt="">
+        <p>${product.name}</p>
+        <p>${(product.priceCents / 100).toFixed(2)}</p>
+    </div>
+        `;
+        });
+    document.querySelector(".search-list").innerHTML = searchHTML;
+});
+
+document.querySelector(".search-btn-mobile").addEventListener("click", () => {
+    document.querySelector(".search-list-mobile").style.width = "100%";
 });
